@@ -22,7 +22,6 @@ export default function Navbar() {
         setIsLoggedIn(false);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -42,60 +41,58 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b px-4 py-3 fixed top-0 w-full shadow-md z-50">
-      {/* Flex container */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        {/* Logo + Nav links */}
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold text-black-600">𝓥𝓮𝓵𝓿𝓮𝓽𝓣𝓱𝓻𝓮𝓪𝓭𝓼</Link>
+    <nav className="fixed top-0 w-full bg-white shadow z-50 border-b">
+      <div className="flex justify-between items-center px-4 py-3">
+        <Link to="/" className="text-xl font-bold">𝓥𝓮𝓵𝓿𝓮𝓽𝓣𝓱𝓻𝓮𝓪𝓭𝓼</Link>
 
-          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? '✖' : '☰'}
-          </button>
-        </div>
-
-        {/* ✅ Search bar - Always visible & centered in nav */}
-        <div className="w-full md:w-1/3">
-          <Search
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            handleSearch={handleSearch}
-          />
-        </div>
-
-        {/* Desktop nav links */}
-        <div className="hidden md:flex gap-6 items-center ">
-          <Link className='text-gray-600 hover:text-blue-600' to="/products">Products</Link>
-          <Link className='text-gray-600 hover:text-blue-600' to="/sale">Sale</Link>
-          <Link className='text-gray-600 hover:text-blue-600' to="/cart">Cart</Link>
-          <Link className='text-gray-600 hover:text-blue-600' to="/contact">Feedback</Link>
-          {isAdmin && (
-            <Link to="/add-product" className="text-green-700 font-bold">+ Add Product</Link>
-          )}
+        <div className="hidden md:flex items-center gap-6">
+          <Link to="/products" className="hover:text-blue-600">Products</Link>
+          <Link to="/sale" className="hover:text-blue-600">Sale</Link>
+          <Link to="/cart" className="hover:text-blue-600">Cart</Link>
+          <Link to="/contact" className="hover:text-blue-600">Feedback</Link>
+          {isAdmin && <Link to="/add-product" className="text-green-700 font-bold">+ Add Product</Link>}
           {!isLoggedIn ? (
             <>
-              <Link className='hover:shadow-lg' to="/login">Login</Link>
-              <Link className='hover:shadow-lg' to="/signup">Signup</Link>
+              <Link to="/login" className="hover:shadow-lg">Login</Link>
+              <Link to="/signup" className="hover:shadow-lg">Signup</Link>
             </>
           ) : (
             <button onClick={handleLogout} className="text-red-600 font-bold">Logout</button>
           )}
         </div>
+
+        <button className="md:hidden text-2xl" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? '✖' : '☰'}
+        </button>
       </div>
 
-      {/* Mobile dropdown */}
+      <div className="px-4 pb-2 md:hidden">
+        <form onSubmit={handleSearch} className="flex mb-2">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="flex-1 border border-gray-300 px-3 py-2 rounded-l-md focus:outline-none"
+          />
+          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-r-md">
+            Search
+          </button>
+        </form>
+      </div>
+
       {menuOpen && (
-        <div className="flex flex-col gap-4 mt-4 border-t pt-4">
-          <Link to="/">Home</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/contact">Contact</Link>
-          <Link to="/sale">Sale</Link>
-          <Link to="/cart">Cart</Link>
-          {isAdmin && <Link to="/add-product">+ Add Product</Link>}
+        <div className="flex flex-col px-4 pb-4 gap-2 border-t md:hidden">
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link to="/products" onClick={() => setMenuOpen(false)}>Products</Link>
+          <Link to="/sale" onClick={() => setMenuOpen(false)}>Sale</Link>
+          <Link to="/cart" onClick={() => setMenuOpen(false)}>Cart</Link>
+          <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
+          {isAdmin && <Link to="/add-product" onClick={() => setMenuOpen(false)}>+ Add Product</Link>}
           {!isLoggedIn ? (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Signup</Link>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link>
             </>
           ) : (
             <button onClick={handleLogout} className="text-red-600 font-bold">Logout</button>
