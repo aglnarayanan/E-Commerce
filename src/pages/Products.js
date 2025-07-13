@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const mockProducts = [
   { _id: '1', name: 'Cool T-Shirt', price: 499, imageUrl: 'https://res.cloudinary.com/dxkerla8e/image/upload/v1752349043/3bd5d8104055543.5f5a590049a9f_dzn3nr.png' },
@@ -13,55 +13,57 @@ const mockProducts = [
 ];
 
 export default function Products() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('cartItems')) || [];
-    setCartItems(stored);
+    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    setCart(storedCart);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
-  const toggleCart = (product) => {
-    const exists = cartItems.find((item) => item._id === product._id);
-    if (exists) {
-      setCartItems(cartItems.filter((item) => item._id !== product._id));
-    } else {
-      setCartItems([...cartItems, product]);
+  const addToCart = (product) => {
+    const exists = cart.find((item) => item._id === product._id);
+    if (!exists) {
+      setCart([...cart, { ...product, qty: 1 }]);
     }
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4 mt-16">
+    <div className="container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {mockProducts.map((product) => (
         <div
           key={product._id}
-          className="relative border rounded shadow p-4 flex flex-col items-center"
+          className="product-card bg-white rounded-lg shadow-md overflow-hidden transform transition hover:-translate-y-1 hover:shadow-lg"
         >
-          <button
-            className="absolute top-2 right-2 text-red-500 text-2xl"
-            onClick={() => toggleCart(product)}
-          >
-            {cartItems.find((item) => item._id === product._id) ? '❤️' : '🤍'}
-          </button>
-
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full h-64 object-cover mb-4"
-          />
-
-          <h2 className="text-lg font-bold">{product.name}</h2>
-          <p className="text-gray-600 mb-4">₹{product.price}</p>
-
-          <Link
-            to={`/product/${product._id}`}
-            className="bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            Shop Now
-          </Link>
+          <div className="relative overflow-hidden h-64">
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="p-4 flex flex-col gap-4">
+            <h3 className="text-lg font-semibold">{product.name}</h3>
+            <span className="text-blue-600 font-bold">₹{product.price}</span>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+              <Link
+                to={`/products/${product._id}`}
+                className="w-full text-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+              >
+                Shop Now
+              </Link>
+              <button
+                onClick={() => addToCart(product)}
+                className="w-full text-center bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
         </div>
       ))}
     </div>

@@ -8,7 +8,7 @@ import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Contact from './pages/Contact';
+import Contact from './pages/Feedback';
 import Sale from './pages/Sale';
 import Footer from './components/Footer';
 

@@ -15,17 +15,22 @@ export default function HeroBanner() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length);
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-full overflow-hidden relative mt-16">
-      <img
-        src={images[index]}
-        alt="Hero Banner"
-        className="w-full h-[400px] object-cover"
-      />
+    <div className="w-full overflow-hidden relative mt-16 h-[400px]">
+      {images.map((img, i) => (
+        <img
+          key={i}
+          src={img}
+          alt={`Banner ${i + 1}`}
+          className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            i === index ? 'opacity-100 z-10' : 'opacity-0 z-0'
+          }`}
+        />
+      ))}
     </div>
   );
 }
