@@ -8,7 +8,7 @@ import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/AddProduct';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Contact from './pages/Feedback';
+import Contact from './pages/Feedback'; // assuming you renamed Contact to Feedback
 import Sale from './pages/Sale';
 import Footer from './components/Footer';
 
@@ -20,7 +20,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/products/:id" element={<ProductDetail />} /> {/* ✅ FIXED: plural */}
           <Route path="/sale" element={<Sale />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/add-product" element={<AddProduct />} />
@@ -28,7 +28,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
         </Routes>
       </main>
-      <Footer /> {/* ✅ Always visible */}
+      <Footer />
     </BrowserRouter>
   );
 }
